@@ -1,6 +1,9 @@
 import dlib
 import cv2
 import numpy as np
+import json
+import ex2
+import pyrebase
 
 # 랜드마크 만들기
 ALL = list(range(0, 68))
@@ -21,12 +24,13 @@ predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')   # �
 
 # create VideoCapture object (input the video)
 # 0 입력시 노트북 카메라 실행
-vid_in = cv2.VideoCapture(0)          
+vid_in = cv2.VideoCapture(0)
 # "---" for the video file
-#vid_in = cv2.VideoCapture("baby_vid.mp4")
+#vid_in = cv2.VideoCapture("temp.mp4")
 
 # capture the image in an infinite loop
 # -> make it looks like a video
+count=0
 while True:
     # Get frame from video
     # get success : ret = True / fail : ret= False
@@ -39,8 +43,9 @@ while True:
     # 얼굴 인식하기 ( 1 은 인식범위)
     face_detector = detector(img_gray, 1)
     # 얼굴 인식되면 얼굴갯수 출력 (혼자면 1출력)   인식x -> O출력 
-    print("The number of faces detected : {}".format(len(face_detector)))   
-
+    print("The number of faces detected : {}".format(len(face_detector)))
+    count%=10  # 10번중에 한번 좌표따기
+    count+=1   
     # 얼굴개수만큼 반복하여 윤곽표시
     # 하나의 얼굴은 하나의 윤곽
     for face in face_detector:
@@ -58,6 +63,11 @@ while True:
         for p in landmarks.parts():
             landmark_list.append([p.x, p.y])
             cv2.circle(image, (p.x, p.y), 2, (0, 255, 0), -1)
+            
+        if count==9 :                               # 9번 인식될시 실행 얼굴 유사도 계산을위해 좌표 보내기
+            print(landmark_list)
+            ex2.MyFace(landmark_list)
+            
 
 
     cv2.imshow('result', image)
