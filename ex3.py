@@ -9,5 +9,5 @@ def ucle(a,b):
 
     dist = np.sqrt(np.sum(np.square(A-B)))
 
-    print(dist)
+    print(dist/68)
 

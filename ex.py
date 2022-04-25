@@ -65,7 +65,7 @@ while True:
             cv2.circle(image, (p.x, p.y), 2, (0, 255, 0), -1)
             
         if count==9 :                               # 9번 인식될시 실행 얼굴 유사도 계산을위해 좌표 보내기
-            print(landmark_list)
+            #print(landmark_list)
             ex2.MyFace(landmark_list)
             
 
